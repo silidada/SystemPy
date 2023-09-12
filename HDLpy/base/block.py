@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 # @Time : 2023/9/9 13:43
 # @Author : ChenHaHa
-from SystemPy.base import Clk, Signal, draw_wave
+from HDLpy.base import Clk, Signal
 import tqdm
-from SystemPy.compile import *
+from HDLpy.compile import *
 from threading import Thread
 
 # 暂无解决多个触发同时触发的问题

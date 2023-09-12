@@ -4,10 +4,10 @@
 # @Author : ChenHaHa
 
 from vcd import VCDWriter
-from SystemPy.base import Signal
-from SystemPy.base import Block
+from HDLpy.base import Signal
+from HDLpy.base import Block
 import os
-from SystemPy.output.utils import get_record_signal_inst
+from HDLpy.output.utils import get_record_signal_inst
 
 
 def write_vcd(signals: list, block: Block, filename="vcd_output"):

@@ -1,5 +1,5 @@
-from compile import get_func_bytecode
-from base import Block, Signal, Clk, Module
+from HDLpy.compile import get_func_bytecode
+from HDLpy.base import Block, Signal, Clk, Module
 
 block = Block()
 block.set_time_scale('1ns', '1ps')

@@ -3,8 +3,8 @@
 # @Time : 2023/9/12 13:56
 # @Author : ChenHaHa
 
-from SystemPy.base import Signal, Clk
-from SystemPy.output.utils import get_record_signal_inst
+from HDLpy.base import Signal, Clk
+from HDLpy.output.utils import get_record_signal_inst
 
 
 def write_data(clk):

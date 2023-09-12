@@ -8,7 +8,7 @@ import inspect
 import ast
 import re
 import importlib
-from SystemPy.compile.code import *
+from HDLpy.compile.code import *
 
 
 def get_function_bytecode(func):
