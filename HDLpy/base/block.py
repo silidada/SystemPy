@@ -59,6 +59,14 @@ class Block(object):
 
         return decorator
 
+    def add_always_module(self, func, *args):
+        for arg in args:
+            self.trigger_set.add(arg)
+            if arg not in self.trigger_dict.keys():
+                self.trigger_dict[arg] = list()
+            self.trigger_dict[arg].append(func)
+        self.block_dict['always'].append((func, args))
+
     def trigger(self):
         for activate_func in self.trigger_set:
             if activate_func():
@@ -79,7 +87,6 @@ class Block(object):
 
     @staticmethod
     def executor(instructions):
-        # print('instructions: ', instructions)
         all_signals = Signal.get_instance_name()
         for instruction in instructions:
             # print('instruction: ', instruction)
@@ -214,14 +221,14 @@ class Block(object):
             times = 0
             for code in compiled_code:
                 if isinstance(code, int):
-                    code_t = code * self.unit // self.precision
+                    code_t = code * self.unit // self.precision + times
                     if code_t in self._time_tree.keys():
                         raise Exception(f"Time {code} is already used")
                     else:
                         times = code_t
                 else:
                     self._time_tree[times] = code
-            print(self._time_tree)
+            # print(self._time_tree)
         return wrapper
 
     def delay(self, time):
@@ -240,6 +247,14 @@ class Block(object):
             for func in self.block_dict[block_type]:
                 func[0]()
 
+
+def delay(time: int):
+    """
+    initial 模块中的 delay
+    :param time: int, 单位是在 set_time_scale 中设置的 unit
+    :return:
+    """
+    pass
 
 # block = Block()
 # block.set_time_scale('1ns', '100ps')

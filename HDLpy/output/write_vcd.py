@@ -21,11 +21,9 @@ def write_vcd(signals: list, block: Block, filename="vcd_output"):
     signals_values = []
     signals_vars = []
     precision = block.precision
-    # print(precision, 'ps')
     unit_convert = {0: 'ps', 1: 'ns', 2: 'us', 3: 'ms', 4: 's'}
     unit = unit_convert[(len(str(precision)) - 1) // 3]
-    precision = precision // (10 ** (3 * (len(str(precision)) - 1) // 3))
-    # print(precision, unit)
+    precision = precision // (10 ** (((len(str(precision)) - 1) // 3) * 3))
 
     # writer = VCDWriter(open(f'{filename}.vcd', 'w'), timescale=f'{block.precision} ps', date='today')
     # writer = VCDWriter(open(f'{filename}.vcd', 'w'), timescale=str(block.precision) + ' ps', date='today')
@@ -39,7 +37,6 @@ def write_vcd(signals: list, block: Block, filename="vcd_output"):
             print(f"Warning: {name} is not record")
             continue
         data = block.record_dict[name]
-
         var = writer.register_var('top', name, 'wire', size=signal.width)
         signals_vars.append(var)
         signals_values.append(data)

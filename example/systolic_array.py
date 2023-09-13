@@ -11,10 +11,10 @@
 
 # *********************************** import *****************************************
 # 导入基本模块
-from base import Block, Signal, Clk, Module
+from HDLpy.base import Block, Signal, Clk, Module
 
 # 导入显示模块，该模块可以使用modelsim来显示波形
-from output import display_block_modelsim
+from HDLpy.output import display_block_modelsim
 # ************************************************************************************
 
 # *********************************** 创建模块 *****************************************
@@ -115,7 +115,11 @@ block.run('1000ns')
 
 # 生成波形并显示 首先需要确保已经正确安装modelsim并加入环境变量中
 # pycharm 中无法打开modelsim，可以使用命令行执行， python -m example.systolic_array
-display_block_modelsim(block, 'systolic_array')
+import os
+working_dir = './working'
+if not os.path.exists(working_dir):
+    os.mkdir(working_dir)
+display_block_modelsim(block, './working/systolic_array')
 """
 如果你不想打开modelsim，只是希望生成vcd文件，可以使用下面的代码
 `write_vcd(signals, block, filename)`

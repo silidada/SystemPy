@@ -5,6 +5,9 @@
 from abc import ABC
 import inspect
 import re
+from typing import Union
+
+_MAX_WIDTH = 9999
 
 
 class Module:
@@ -34,7 +37,7 @@ class Signal:
     _instance_code_line = dict()
     _clk_instance_dict = dict()
 
-    def __init__(self, width=1, value='x', record=False, name=None):
+    def __init__(self, width=1, value: Union[str, int] = 'x', record=False, name=None, ignore=False):
         # super().__init__()
         self.width = width
         self.value = value
@@ -43,6 +46,8 @@ class Signal:
         if self.__class__ == Signal:
             Signal._instance.append(self)
         self.record = record
+
+        if ignore: return
 
         # 获取调用此构造函数的代码行
         frame = inspect.currentframe().f_back
@@ -86,27 +91,31 @@ class Signal:
         return str(self.value)
 
     def __add__(self, other):
-        if self.value == 'x':
+        other1 = self._get_other_value(other)
+        if self.value == 'x' or other1 == 'x':
             return 'x'
-        if self.value == 'z':
+        if self.value == 'z' or other1 == 'z':
             return 'z'
-        if isinstance(other, int):
-            return self.value + other
-        if other.value == 'x':
-            return 'x'
-        if other.value == 'z':
-            return 'z'
-        return self.value + other.value
-        # return Signal(self.width, self.value + other.value)
+        assert isinstance(other1, int)
+        assert isinstance(self.value, int)
+        other1: int
+        self.value: int
+        if isinstance(other, Signal):
+            return Signal(_MAX_WIDTH, self.value + other1, ignore=True)
+        return self.value + other1
 
     def __le__(self, other):
         # 模拟verilog中的 <=
+        if isinstance(other, Signal):
+            other = other.value
+
         if self.value == 'x' or other == 'x':
             self.next_value = 'x'
             return self
         if self.value == 'z' or other == 'z':
             self.next_value = 'z'
             return self
+
         if other > self.max_value:
             other = other & (2 ** (self.width - 1))
         self.next_value = other
@@ -180,6 +189,18 @@ class Signal:
         assert isinstance(self.value, int)
         return self.value >> other.value
 
+    def __mul__(self, other):
+        other1 = self._get_other_value(other)
+        if self.value == 'x' or other1 == 'x':
+            return 'x'
+        if self.value == 'z' or other1 == 'z':
+            return 'z'
+
+        other1: int
+        if isinstance(other, Signal):
+            return Signal(_MAX_WIDTH, self.value * other1, ignore=True)
+        return self.value * other1
+
     def __hash__(self):
         return id(self)
 
@@ -192,6 +213,12 @@ class Signal:
             return self
         else:
             raise TypeError
+
+    @staticmethod
+    def _get_other_value(other):
+        if isinstance(other, Signal):
+            return other.value
+        return other
 
     @classmethod
     def get_all_instances(cls):

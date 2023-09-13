@@ -141,6 +141,7 @@ def compile_init(bytecodes, signals_inst_dict):
         if ignore_num > 0:
             ignore_num -= 1
             continue
+        # print(bytecode, cmd)
         instruction = bytecode[0]
         if instruction in LOAD_CMD:
             if instruction == 'LOAD_CONST':
@@ -196,4 +197,5 @@ def compile_init(bytecodes, signals_inst_dict):
             compiled_instructs.append(current_cmd)
             current_cmd = list()
     print("*" * 100)
+    # print(compiled_instructs)
     return compiled_instructs

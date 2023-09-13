@@ -9,10 +9,10 @@
 """
 # *********************************** import *****************************************
 # 导入基本模块
-from base import Clk, Signal, Block
+from HDLpy.base import Clk, Signal, Block
 
 # 导入显示模块，该模块可以使用modelsim来显示波形
-from output import display_block_modelsim
+from HDLpy.output import display_block_modelsim
 # ************************************************************************************
 
 # *********************************** 创建模块 *****************************************
@@ -40,8 +40,11 @@ def test():
 
 # 开始运行系统，运行时间为 1000ns， 时间单位可以为 ns, us, ms, s
 block.run('1000ns')
-
+import os
+working_dir = './working/'
+if not os.path.exists(working_dir):
+    os.mkdir(working_dir)
 # 生成波形并显示 首先需要确保已经正确安装modelsim并加入环境变量中
 # pycharm 中无法打开modelsim，可以使用命令行执行， python -m example.systolic_array
-display_block_modelsim(block, 'counter')
+display_block_modelsim(block, working_dir + 'counter')
 

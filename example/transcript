@@ -1,0 +1,7 @@
+# do temp.do
+# ** Error: Active logfile is not in simulation mode
+# Error in macro ./temp.do line 4
+# Active logfile is not in simulation mode
+#     while executing
+# "add wave *"
+# Break key hit
